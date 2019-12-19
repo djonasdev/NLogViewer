@@ -10,8 +10,8 @@
 
 ## Nuget
 
-[![NuGet](https://img.shields.io/nuget/v/sentinel.nlogviewer.svg)](https://www.nuget.org/packages/Sentinel.NLogViewer)
-[![NuGetDownloads](https://img.shields.io/nuget/dt/sentinel.nlogviewer.svg)](https://www.nuget.org/packages/Sentinel.NLogViewer)
+[![NuGet](https://img.shields.io/nuget/v/sentinel.nlogviewer.svg "nuget")](https://www.nuget.org/packages/Sentinel.NLogViewer)
+[![NuGetDownloads](https://img.shields.io/nuget/dt/sentinel.nlogviewer.svg "nuget downloads")](https://www.nuget.org/packages/Sentinel.NLogViewer)
 
 A NuGet-package is available [here][nuget].
 
