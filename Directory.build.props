@@ -3,9 +3,12 @@
     <LangVersion>latest</LangVersion>
     <Authors>Dominic Jonas</Authors>
     <Company>Dominic Jonas</Company>
+    <Product>Sentinel.NLogViewer</Product>
     <PackageProjectUrl>https://github.com/dojo90/NLogViewer</PackageProjectUrl>
     <RepositoryUrl>git@github.com:dojo90/NLogViewer.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageTags>sentinel nlog</PackageTags>
+    <Description>NlogViewer is a ui control library to visualize NLog logs</Description>
   </PropertyGroup>
 
   <!--When the GitVersion_SemVer variable is already set (via environment), disable the GitVersion Tasks and set the version properties-->

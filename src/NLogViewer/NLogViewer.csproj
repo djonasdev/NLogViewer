@@ -5,6 +5,7 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>DJ</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Sentinel.NLogViewer</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
