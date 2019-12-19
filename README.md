@@ -9,19 +9,18 @@
 NlogViewer
 ==========
 
-NlogViewer is a ui control library to visualize NLog logs. It is mainly based on [Sentinel][1] and its controls.
+NlogViewer is a ui control library to visualize NLog logs in your personal application. It is mainly based on [Sentinel][1] and its controls.
+
+![NLogViewer][p2]
 
 Actually it contains the following controls:
 
 - `NLogViewer`
 
 Visual Studio
+
 ![NLogViewer][p1]
 ![NLogViewer][p3]
-
-Live preview
-![NLogViewer][p2]
-
 
 ## Quick Start
 
