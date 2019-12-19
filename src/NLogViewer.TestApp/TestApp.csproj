@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net461</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <StartupObject>TestApplication.App</StartupObject>
+    <RootNamespace>TestApplication</RootNamespace>
+    <AssemblyName>TestApp</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitVersion" Version="3.6.5" />
+    <PackageReference Include="NLog" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NLogViewer\NLogViewer.csproj" />
+  </ItemGroup>
+  
+</Project>

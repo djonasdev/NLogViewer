@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "NLogViewer.TestApp\TestApp.csproj", "{FF15C180-042C-42D9-8687-24F1BEB5F4FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLogViewer", "NLogViewer\NLogViewer.csproj", "{D1C5763C-DA9C-43E0-B7EA-DDC9AAA90AE7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2E975FF9-26E0-49F1-B10A-CFCDE832B0EE}"
+	ProjectSection(SolutionItems) = preProject
+		..\Directory.build.props = ..\Directory.build.props
+		..\GitVersion.yml = ..\GitVersion.yml
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF15C180-042C-42D9-8687-24F1BEB5F4FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF15C180-042C-42D9-8687-24F1BEB5F4FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF15C180-042C-42D9-8687-24F1BEB5F4FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF15C180-042C-42D9-8687-24F1BEB5F4FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1C5763C-DA9C-43E0-B7EA-DDC9AAA90AE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1C5763C-DA9C-43E0-B7EA-DDC9AAA90AE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1C5763C-DA9C-43E0-B7EA-DDC9AAA90AE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1C5763C-DA9C-43E0-B7EA-DDC9AAA90AE7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F32EE165-3408-4FBD-9AA5-03E9FD4C9AC0}
+	EndGlobalSection
+EndGlobal

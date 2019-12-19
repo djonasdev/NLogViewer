@@ -1,0 +1,19 @@
+mode: ContinuousDeployment
+branches:  
+  issue:
+    tag: issue-{BranchName}
+    increment: Inherit
+    prevent-increment-of-merged-branch-version: false
+    regex: ^(?=\d+-)
+    source-branches:
+    - develop
+    - master
+    - release
+    - feature
+    - support
+    - hotfix
+    - issue
+  develop:
+    increment: Patch
+ignore:
+  sha: []
