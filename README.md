@@ -6,6 +6,15 @@
 [p2]: doc/images/live.gif "NLogViewer"
 [p3]: doc/images/control2.png "NLogViewer"
 
+[nuget]: https://nuget.org/packages/Sentinel.NlogViewer/
+
+## Nuget
+
+[![NuGet](https://img.shields.io/nuget/v/sentinel.nlogviewer.svg)](https://www.nuget.org/packages/Sentinel.NLogViewer)
+[![NuGetDownloads](https://img.shields.io/nuget/dt/sentinel.nlogviewer.svg)](https://www.nuget.org/packages/Sentinel.NLogViewer)
+
+A NuGet-package is available [here][nuget].
+
 NlogViewer
 ==========
 
