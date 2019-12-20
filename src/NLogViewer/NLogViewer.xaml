@@ -132,7 +132,7 @@
                 <DataGridTemplateColumn Header="Level" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image x:Name="Image" RenderOptions.BitmapScalingMode="HighQuality"
+                            <Image x:Name="Image" RenderOptions.BitmapScalingMode="Linear"
                                    Height="18" VerticalAlignment="Center" HorizontalAlignment="Center" />
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Path=Level}"

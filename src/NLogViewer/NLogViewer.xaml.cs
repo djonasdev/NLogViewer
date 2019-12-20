@@ -270,8 +270,8 @@ namespace DJ
 
         protected virtual void OnAutoScrollChanged()
         {
-            //if (AutoScroll)
-                //DataGrid?.ScrollToEnd();
+            if (AutoScroll)
+                DataGrid?.ScrollToEnd();
         }
         
         /// <summary>
