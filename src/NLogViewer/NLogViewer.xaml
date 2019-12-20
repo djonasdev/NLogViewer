@@ -58,23 +58,14 @@
             </ToggleButton>
         </StackPanel>
 
-        <DataGrid
-            x:Name="DataGrid"
+        <ListView
+            x:Name="ListView"
             Grid.Row="2"
             ItemsSource="{Binding Path=LogEvents.View, IsAsync=True}"
-            AutoGenerateColumns="False"
-            CanUserAddRows="False"
-            CanUserDeleteRows="False"
-            CanUserReorderColumns="True"
-            CanUserResizeColumns="True"
-            CanUserResizeRows="True"
-            CanUserSortColumns="True"
             BorderThickness="0"
-            ScrollViewer.CanContentScroll="False"
-            EnableColumnVirtualization="False"
-            EnableRowVirtualization="False">
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
+            ScrollViewer.CanContentScroll="False">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=Level}"
                                      Value="{x:Static nLog:LogLevel.Trace}">
@@ -120,17 +111,12 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Header="ID">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Path=SequenceID}" HorizontalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Level" Width="Auto">
-                    <DataGridTemplateColumn.CellTemplate>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=SequenceID}" />
+                <GridViewColumn Header="Level" Width="Auto">
+                    <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <Image x:Name="Image" RenderOptions.BitmapScalingMode="Linear"
                                    Height="18" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -167,36 +153,25 @@
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="TimeStamp" Width="140">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Text="{Binding Path=TimeStamp, StringFormat=\{0:dd-MM-yyyy hh:mm:ss.fff \}}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="LoggerName" Width="Auto">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock x:Name="Block" Text="{Binding Path=LoggerName}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Message" Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="TimeStamp"
+                                DisplayMemberBinding="{Binding Path=TimeStamp, StringFormat=\{0:dd-MM-yyyy hh:mm:ss.fff \}}" />
+                <GridViewColumn Header="LoggerName" DisplayMemberBinding="{Binding Path=LoggerName}" />
+                <GridViewColumn Header="Message">
+                    <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
                                 IsReadOnly="True"
                                 Background="Transparent"
                                 BorderThickness="0"
-                                Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}, Path=Foreground}"
+                                Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Path=Foreground}"
                                 Text="{Binding Path=FormattedMessage, Mode=OneWay}" />
                         </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+            </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </UserControl>

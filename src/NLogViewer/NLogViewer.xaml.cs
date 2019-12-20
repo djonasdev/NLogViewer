@@ -273,7 +273,7 @@ namespace DJ
         protected virtual void OnAutoScrollChanged()
         {
             if (AutoScroll)
-                DataGrid?.ScrollToEnd();
+                ListView?.ScrollToEnd();
         }
         
         /// <summary>
@@ -390,14 +390,14 @@ namespace DJ
 
                 if (AutoScroll)
                 {
-                    DataGrid?.ScrollToEnd();
+                    ListView?.ScrollToEnd();
                 }
             });
         }
 
         private void _OnLoaded(object sender, RoutedEventArgs e)
         {
-            DataGrid.ScrollToEnd();
+            ListView.ScrollToEnd();
         }
 
         #endregion
