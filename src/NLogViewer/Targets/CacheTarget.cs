@@ -12,7 +12,7 @@ namespace DJ.Targets
     public class CacheTarget : Target
     {
         /// <summary>
-        /// If there is no target in nlog.config definedm a new one is registered with the default maxcount
+        /// If there is no target in nlog.config defined a new one is registered with the default maxcount
         /// </summary>
         /// <param name="defaultMaxCount"></param>
         /// <returns></returns>
@@ -45,7 +45,7 @@ namespace DJ.Targets
         /// The maximum amount of entries held
         /// </summary>
         [RequiredParameter]
-        public int MaxCount { get; set; } = 1000;
+        public int MaxCount { get; set; } = 100;
         
         public IObservable<LogEventInfo> Cache => _CacheSubject.AsObservable();
         private readonly ReplaySubject<LogEventInfo> _CacheSubject;
