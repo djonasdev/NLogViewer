@@ -16,7 +16,7 @@ namespace DJ.Targets
         /// </summary>
         /// <param name="defaultMaxCount"></param>
         /// <returns></returns>
-        public static CacheTarget GetInstance(int defaultMaxCount)
+        public static CacheTarget GetInstance(int defaultMaxCount = 0)
         {
             if(LogManager.Configuration == null)
                 LogManager.Configuration = new LoggingConfiguration();
@@ -42,9 +42,8 @@ namespace DJ.Targets
         // ##########################################################################################
 
         /// <summary>
-        /// The maximum amount of entries held
+        /// The maximum amount of entries held in buffer/cache
         /// </summary>
-        [RequiredParameter]
         public int MaxCount { get; set; } = 100;
         
         public IObservable<LogEventInfo> Cache => _CacheSubject.AsObservable();

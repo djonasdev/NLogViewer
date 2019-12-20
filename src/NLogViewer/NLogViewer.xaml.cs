@@ -361,7 +361,7 @@ namespace DJ
             Loaded += _OnLoaded;
             ClearCommand = new ActionCommand(_LogEventInfos.Clear);
 
-            var target = CacheTarget.GetInstance(1000);
+            var target = CacheTarget.GetInstance();
             
             target.Cache.SubscribeOn(Scheduler.Default).Buffer(TimeSpan.FromMilliseconds(100)).Where (x => x.Any()).ObserveOnDispatcher(DispatcherPriority.Background).Subscribe(infos =>
             {
