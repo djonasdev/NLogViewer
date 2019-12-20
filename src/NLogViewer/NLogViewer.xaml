@@ -63,9 +63,11 @@
             Grid.Row="2"
             ItemsSource="{Binding Path=LogEvents.View, IsAsync=True}"
             BorderThickness="0"
-            ScrollViewer.CanContentScroll="False">
+            ScrollViewer.CanContentScroll="True">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="BorderThickness" Value="1"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=Level}"
                                      Value="{x:Static nLog:LogLevel.Trace}">
@@ -114,7 +116,7 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=SequenceID}" />
+                <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=SequenceID}" Width="40"/>
                 <GridViewColumn Header="Level" Width="Auto">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
@@ -156,9 +158,10 @@
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>
                 <GridViewColumn Header="TimeStamp"
-                                DisplayMemberBinding="{Binding Path=TimeStamp, StringFormat=\{0:dd-MM-yyyy hh:mm:ss.fff \}}" />
-                <GridViewColumn Header="LoggerName" DisplayMemberBinding="{Binding Path=LoggerName}" />
-                <GridViewColumn Header="Message">
+                                DisplayMemberBinding="{Binding Path=TimeStamp, StringFormat=\{0:dd-MM-yyyy hh:mm:ss.fff \}}" 
+                                Width="Auto"/>
+                <GridViewColumn Header="LoggerName" DisplayMemberBinding="{Binding Path=LoggerName}" Width="Auto"/>
+                <GridViewColumn Header="Message" Width="Auto">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
