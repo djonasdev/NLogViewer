@@ -305,6 +305,22 @@ namespace DJ
         /// </summary>
         public static readonly DependencyProperty PauseProperty = DependencyProperty.Register("Pause", typeof(bool), typeof(NLogViewer), new PropertyMetadata(false));
         
+        /// <summary>
+        /// The maximum number of entries before automatic cleaning is performed. There is a hysteresis of 100 entries which must be exceeded.
+        /// Example: <see cref="MaxCount"/> is '1000'. Then after '1100' entries, everything until '1000' is deleted.
+        /// If set to '0' or less, it is deactivated
+        /// </summary>
+        public int MaxCount
+        {
+            get => (int)GetValue(MaxCountProperty);
+            set => SetValue(MaxCountProperty, value);
+        }
+
+        /// <summary>
+        /// The <see cref="MaxCount"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty MaxCountProperty = DependencyProperty.Register("MaxCount", typeof(int), typeof(NLogViewer), new PropertyMetadata(5000));
+        
         #endregion
 
         // ##############################################################################################################################
