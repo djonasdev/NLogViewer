@@ -61,7 +61,7 @@
         <DataGrid
             x:Name="DataGrid"
             Grid.Row="2"
-            ItemsSource="{Binding Path=LogEvents, IsAsync=True}"
+            ItemsSource="{Binding Path=LogEvents.View, IsAsync=True}"
             AutoGenerateColumns="False"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
