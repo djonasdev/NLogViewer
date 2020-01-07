@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <dj:NLogViewer/>
+        <dj:NLogViewer MaxCount="1000"/>
     </Grid>
 </Window>

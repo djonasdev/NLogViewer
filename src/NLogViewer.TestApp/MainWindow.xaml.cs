@@ -15,7 +15,7 @@ namespace TestApplication
         {
             InitializeComponent();
             Random random = new Random();
-            Observable.Interval(TimeSpan.FromMilliseconds(150)).Take(250).ObserveOnDispatcher().Subscribe(l =>
+            Observable.Interval(TimeSpan.FromMilliseconds(250)).ObserveOnDispatcher().Subscribe(l =>
             {
                 switch (random.Next(1,6))
                 {

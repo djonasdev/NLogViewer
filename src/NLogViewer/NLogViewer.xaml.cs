@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -30,9 +32,9 @@ namespace DJ
         /// MyComment
         /// </summary>
         [Category("NLogViewer")]
-        public ICollectionView LogEvents
+        public CollectionViewSource LogEvents
         {
-            get => (ICollectionView) GetValue(LogEventsProperty);
+            get => (CollectionViewSource) GetValue(LogEventsProperty);
             private set => SetValue(LogEventsProperty, value);
         }
 
@@ -40,7 +42,7 @@ namespace DJ
         /// The <see cref="LogEvents"/> DependencyProperty.
         /// </summary>
         public static readonly DependencyProperty LogEventsProperty = DependencyProperty.Register("LogEvents",
-            typeof(ICollectionView), typeof(NLogViewer), new PropertyMetadata(null));
+            typeof(CollectionViewSource), typeof(NLogViewer), new PropertyMetadata(null));
 
         /// <summary>
         /// The background for the trace output
@@ -270,8 +272,8 @@ namespace DJ
 
         protected virtual void OnAutoScrollChanged()
         {
-            //if (AutoScroll)
-                //DataGrid?.ScrollToEnd();
+            if (AutoScroll)
+                ListView?.ScrollToEnd();
         }
         
         /// <summary>
@@ -305,6 +307,23 @@ namespace DJ
         /// </summary>
         public static readonly DependencyProperty PauseProperty = DependencyProperty.Register("Pause", typeof(bool), typeof(NLogViewer), new PropertyMetadata(false));
         
+        /// <summary>
+        /// The maximum number of entries before automatic cleaning is performed. There is a hysteresis of 100 entries which must be exceeded.
+        /// Example: <see cref="MaxCount"/> is '1000'. Then after '1100' entries, everything until '1000' is deleted.
+        /// If set to '0' or less, it is deactivated
+        /// </summary>
+        [Category("NLogViewer")]
+        public int MaxCount
+        {
+            get => (int)GetValue(MaxCountProperty);
+            set => SetValue(MaxCountProperty, value);
+        }
+
+        /// <summary>
+        /// The <see cref="MaxCount"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty MaxCountProperty = DependencyProperty.Register("MaxCount", typeof(int), typeof(NLogViewer), new PropertyMetadata(5000));
+        
         #endregion
 
         // ##############################################################################################################################
@@ -325,6 +344,9 @@ namespace DJ
 
         private ObservableCollection<LogEventInfo> _LogEventInfos { get; } = new ObservableCollection<LogEventInfo>();
 
+
+
+
         #endregion
 
         // ##############################################################################################################################
@@ -341,29 +363,41 @@ namespace DJ
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
-            LogEvents = CollectionViewSource.GetDefaultView(_LogEventInfos);
+            LogEvents = new CollectionViewSource {Source = _LogEventInfos};
+            
             Loaded += _OnLoaded;
             ClearCommand = new ActionCommand(_LogEventInfos.Clear);
 
-            var target = CacheTarget.GetInstance(1000);
+            var target = CacheTarget.GetInstance();
             
             target.Cache.SubscribeOn(Scheduler.Default).Buffer(TimeSpan.FromMilliseconds(100)).Where (x => x.Any()).ObserveOnDispatcher(DispatcherPriority.Background).Subscribe(infos =>
             {
                 if (Pause) return;
-                foreach (LogEventInfo info in infos)
+                using (LogEvents.DeferRefresh())
                 {
-                    _LogEventInfos.Add(info);
+                    foreach (LogEventInfo info in infos)
+                    {
+                        _LogEventInfos.Add(info);
+                    }
+                    if (MaxCount >= 0 & _LogEventInfos.Count - 100 > MaxCount)
+                    {
+                        for (int i = 0; i < _LogEventInfos.Count - MaxCount; i++)
+                        {
+                            _LogEventInfos.RemoveAt(0);
+                        }
+                    }   
                 }
+
                 if (AutoScroll)
                 {
-                    DataGrid?.ScrollToEnd();
+                    ListView?.ScrollToEnd();
                 }
             });
         }
 
         private void _OnLoaded(object sender, RoutedEventArgs e)
         {
-            DataGrid.ScrollToEnd();
+            ListView.ScrollToEnd();
         }
 
         #endregion

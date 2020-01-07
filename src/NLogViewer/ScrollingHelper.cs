@@ -7,9 +7,9 @@ namespace DJ
 {
     public static class ScrollingHelper
     {
-        public static void ScrollToEnd(this DataGrid dataGrid)
+        public static void ScrollToEnd(this ListView listView)
         {
-            var scrollViewer = GetDescendantByType(dataGrid, typeof(ScrollViewer)) as ScrollViewer;
+            var scrollViewer = GetDescendantByType(listView, typeof(ScrollViewer)) as ScrollViewer;
             scrollViewer?.ScrollToEnd();
         }
 
