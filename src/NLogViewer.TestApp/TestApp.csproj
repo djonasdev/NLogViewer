@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFrameworks>netcoreapp3.0;net461</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <StartupObject>TestApplication.App</StartupObject>
     <RootNamespace>TestApplication</RootNamespace>
@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="GitVersion" Version="3.6.5" />
-    <PackageReference Include="NLog" Version="4.0.0" />
+    <PackageReference Include="NLog" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
