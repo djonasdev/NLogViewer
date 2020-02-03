@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "NLogViewer.TestApp\TestApp.csproj", "{FF15C180-042C-42D9-8687-24F1BEB5F4FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLogViewer.TestApp", "NLogViewer.TestApp\NLogViewer.TestApp.csproj", "{FF15C180-042C-42D9-8687-24F1BEB5F4FB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLogViewer", "NLogViewer\NLogViewer.csproj", "{D1C5763C-DA9C-43E0-B7EA-DDC9AAA90AE7}"
 EndProject
