@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitVersion" Version="3.6.5" />
     <PackageReference Include="NLog" Version="4.5.0" />
   </ItemGroup>
 
