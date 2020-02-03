@@ -13,6 +13,7 @@ namespace TestApplication
         private readonly Logger _Logger = LogManager.GetCurrentClassLogger();
         public MainWindow()
         {
+            Title = $"Testing v{AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}";
             InitializeComponent();
             Random random = new Random();
             Observable.Interval(TimeSpan.FromMilliseconds(250)).ObserveOnDispatcher().Subscribe(l =>
