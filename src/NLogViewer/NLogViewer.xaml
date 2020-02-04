@@ -160,8 +160,12 @@
                 <GridViewColumn Header="TimeStamp"
                                 DisplayMemberBinding="{Binding Path=TimeStamp, StringFormat=\{0:dd-MM-yyyy hh:mm:ss.fff \}}" 
                                 Width="Auto"/>
-                <GridViewColumn Header="LoggerName" DisplayMemberBinding="{Binding Path=LoggerName}" Width="Auto"/>
-                <GridViewColumn Header="Message" Width="Auto">
+                <GridViewColumn Header="LoggerName" DisplayMemberBinding="{Binding Path=LoggerName}"
+                                Width="{Binding Path=LoggerNameWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type dj:NLogViewer}}}"
+                                />
+                <GridViewColumn Header="Message"
+                                Width="{Binding Path=MessageWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type dj:NLogViewer}}}"
+                                >
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox

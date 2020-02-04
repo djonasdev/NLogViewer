@@ -323,7 +323,33 @@ namespace DJ
         /// The <see cref="MaxCount"/> DependencyProperty.
         /// </summary>
         public static readonly DependencyProperty MaxCountProperty = DependencyProperty.Register("MaxCount", typeof(int), typeof(NLogViewer), new PropertyMetadata(5000));
-        
+
+        [Category("NLogViewer"),Description("Set Message column width"),DefaultValue(Double.NaN)]
+        public double MessageWidth
+        {
+            get => (double)GetValue(MessageWidthProperty);
+            set => SetValue(MessageWidthProperty, value);
+        }
+
+        /// <summary>
+        /// The <see cref="MessageWidth"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty MessageWidthProperty = DependencyProperty.Register("MessageWidth",
+            typeof(double), typeof(NLogViewer), new UIPropertyMetadata(Double.NaN));
+
+        [Category("NLogViewer"), Description("Set LoggerName column width"), DefaultValue(Double.NaN)]
+        public double LoggerNameWidth
+        {
+            get => (double)GetValue(LoggerNameWidthProperty);
+            set => SetValue(LoggerNameWidthProperty, value);
+        }
+
+        /// <summary>
+        /// The <see cref="LoggerNameWidth"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty LoggerNameWidthProperty = DependencyProperty.Register("LoggerNameWidth",
+            typeof(double), typeof(NLogViewer), new UIPropertyMetadata(Double.NaN));
+
         #endregion
 
         // ##############################################################################################################################

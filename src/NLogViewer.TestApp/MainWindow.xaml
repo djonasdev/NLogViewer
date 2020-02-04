@@ -6,6 +6,6 @@
         xmlns:dj="clr-namespace:DJ;assembly=NLogViewer"
         mc:Ignorable="d" Height="450" Width="800">
     <Grid>
-        <dj:NLogViewer MaxCount="1000"/>
+        <dj:NLogViewer MaxCount="1000" MessageWidth="376"/>
     </Grid>
 </Window>
