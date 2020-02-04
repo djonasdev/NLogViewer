@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using DJ.Helper;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -12,18 +13,26 @@ namespace DJ.Targets
     public class CacheTarget : Target
     {
         /// <summary>
-        /// If there is no target in nlog.config defined a new one is registered with the default maxcount
+        /// Look in the NLog.config if any target is already defined and returns it, otherwise a new one is registered
         /// </summary>
-        /// <param name="defaultMaxCount"></param>
+        /// <param name="defaultMaxCount">The maximum entries which should be buffered. Is only used if no target is defined</param>
+        /// <param name="targetName">The name of the target you want to link with</param>
         /// <returns></returns>
-        public static CacheTarget GetInstance(int defaultMaxCount = 0)
+        public static CacheTarget GetInstance(int defaultMaxCount = 0, string targetName = null)
         {
             if(LogManager.Configuration == null)
                 LogManager.Configuration = new LoggingConfiguration();
-            var target = (CacheTarget)LogManager.Configuration.AllTargets.FirstOrDefault(t => t is CacheTarget);
+
+            var predicate = PredicateBuilder.True<Target>().And(t => t is CacheTarget);
+            if (!string.IsNullOrEmpty(targetName))
+            {
+                predicate = predicate.And(t => t.Name.Equals(targetName, StringComparison.CurrentCultureIgnoreCase) ||t.Name.Equals($"{targetName}_wrapped", StringComparison.CurrentCultureIgnoreCase));
+            }
+                
+            var target = (CacheTarget)LogManager.Configuration.AllTargets.FirstOrDefault(predicate.Compile());
             if (target == null)
             {
-                target = new CacheTarget { MaxCount = defaultMaxCount, Name = nameof(CacheTarget)};
+                target = new CacheTarget { MaxCount = defaultMaxCount, Name = targetName ?? nameof(CacheTarget)};
                 LogManager.Configuration.AddTarget(target.Name, target);
                 LogManager.Configuration.LoggingRules.Insert(0, new LoggingRule("*", LogLevel.FromString("Trace"), target));
                 LogManager.ReconfigExistingLoggers();
