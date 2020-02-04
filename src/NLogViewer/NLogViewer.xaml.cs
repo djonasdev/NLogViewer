@@ -27,9 +27,24 @@ namespace DJ
         // ##############################################################################################################################
 
         #region Dependency Properties
+            
+        /// <summary>
+        /// Is looking if any target with this name is configured and tries to link it
+        /// </summary>
+        [Category("NLogViewer")]
+        public string TargetName
+        {
+            get => (string)GetValue(TargetNameProperty);
+            set => SetValue(TargetNameProperty, value);
+        }
 
         /// <summary>
-        /// MyComment
+        /// The <see cref="TargetName"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty TargetNameProperty = DependencyProperty.Register("TargetName", typeof(string), typeof(NLogViewer), new PropertyMetadata(null));
+        
+        /// <summary>
+        /// Private DP to bind to the gui
         /// </summary>
         [Category("NLogViewer")]
         public CollectionViewSource LogEvents
@@ -47,7 +62,7 @@ namespace DJ
         /// <summary>
         /// The background for the trace output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush TraceBackground
         {
             get => (Brush) GetValue(TraceBackgroundProperty);
@@ -64,7 +79,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the trace output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush TraceForeground
         {
             get => (Brush) GetValue(TraceForegroundProperty);
@@ -81,7 +96,7 @@ namespace DJ
         /// <summary>
         /// The background for the debug output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush DebugBackground
         {
             get => (Brush) GetValue(DebugBackgroundProperty);
@@ -98,7 +113,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the debug output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush DebugForeground
         {
             get => (Brush) GetValue(DebugForegroundProperty);
@@ -115,7 +130,7 @@ namespace DJ
         /// <summary>
         /// The background for the info output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush InfoBackground
         {
             get => (Brush) GetValue(InfoBackgroundProperty);
@@ -132,7 +147,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the info output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush InfoForeground
         {
             get => (Brush) GetValue(InfoForegroundProperty);
@@ -148,7 +163,7 @@ namespace DJ
         /// <summary>
         /// The background for the warn output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush WarnBackground
         {
             get => (Brush) GetValue(WarnBackgroundProperty);
@@ -165,7 +180,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the warn output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush WarnForeground
         {
             get => (Brush) GetValue(WarnForegroundProperty);
@@ -182,7 +197,7 @@ namespace DJ
         /// <summary>
         /// The background for the error output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush ErrorBackground
         {
             get => (Brush) GetValue(ErrorBackgroundProperty);
@@ -199,7 +214,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the error output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush ErrorForeground
         {
             get => (Brush) GetValue(ErrorForegroundProperty);
@@ -216,7 +231,7 @@ namespace DJ
         /// <summary>
         /// The background for the fatal output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush FatalBackground
         {
             get => (Brush) GetValue(FatalBackgroundProperty);
@@ -233,7 +248,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the fatal output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush FatalForeground
         {
             get => (Brush) GetValue(FatalForegroundProperty);
@@ -277,7 +292,7 @@ namespace DJ
         }
         
         /// <summary>
-        /// Delelte all entries
+        /// Delele all entries
         /// </summary>
         [Category("NLogViewer")]
         public ICommand ClearCommand
