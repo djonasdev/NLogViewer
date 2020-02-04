@@ -3,7 +3,7 @@
 [3]: https://github.com/yarseyah/sentinel#nlogs-nlogviewer-target-configuration
 
 [p1]: doc/images/control.png "NLogViewer"
-[p2]: doc/images/live.gif "NLogViewer"
+[p2]: doc/images/preview.gif "NLogViewer"
 [p3]: doc/images/control2.png "NLogViewer"
 
 [nuget]: https://nuget.org/packages/Sentinel.NlogViewer/
