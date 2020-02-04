@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dj="clr-namespace:DJ"
              xmlns:nLog="clr-namespace:NLog;assembly=NLog"
+             xmlns:listViewLayoutManager="clr-namespace:DJ.Helper.ListViewLayoutManager"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -63,7 +64,8 @@
             Grid.Row="2"
             ItemsSource="{Binding Path=LogEvents.View, IsAsync=True}"
             BorderThickness="0"
-            ScrollViewer.CanContentScroll="True">
+            ScrollViewer.CanContentScroll="True"
+            listViewLayoutManager:ListViewLayoutManager.Enabled="true">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="BorderBrush" Value="Black"/>
@@ -161,13 +163,14 @@
                                 DisplayMemberBinding="{Binding Path=TimeStamp, StringFormat=\{0:dd-MM-yyyy hh:mm:ss.fff \}}" 
                                 Width="Auto"/>
                 <GridViewColumn Header="LoggerName" DisplayMemberBinding="{Binding Path=LoggerName}" Width="Auto"/>
-                <GridViewColumn Header="Message" Width="Auto">
+                <GridViewColumn Header="Message" Width="Auto" listViewLayoutManager:RangeColumn.IsFillColumn="True">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox
                                 IsReadOnly="True"
                                 Background="Transparent"
                                 BorderThickness="0"
+                                TextWrapping="Wrap"
                                 Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Path=Foreground}"
                                 Text="{Binding Path=FormattedMessage, Mode=OneWay}" />
                         </DataTemplate>

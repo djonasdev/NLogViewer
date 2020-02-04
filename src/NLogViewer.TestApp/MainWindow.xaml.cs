@@ -10,6 +10,8 @@ namespace TestApplication
     /// </summary>
     public partial class MainWindow : Window
     {
+        public const string LOREM_IPSUM = @"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+        
         private readonly Logger _Logger = LogManager.GetCurrentClassLogger();
         public MainWindow()
         {
@@ -33,7 +35,7 @@ namespace TestApplication
                         _Logger.Warn("Hello everyone");
                         break;
                     case 5:
-                        _Logger.Error("Hello everyone");
+                        _Logger.Error(LOREM_IPSUM);
                         break;
                     case 6:
                         _Logger.Fatal("Hello everyone");
