@@ -35,10 +35,19 @@ namespace TestApplication
                         _Logger.Warn("Hello everyone");
                         break;
                     case 5:
-                        _Logger.Error(LOREM_IPSUM);
+                        try
+                        {
+                            int a = 0;
+                            int b = 1;
+                            var c = b / a;
+                        }
+                        catch (Exception ex)
+                        {
+                            _Logger.Error(ex, "There was an error on divison :/");
+                        }
                         break;
                     case 6:
-                        _Logger.Fatal("Hello everyone");
+                        _Logger.Fatal(LOREM_IPSUM);
                         break;
                 }
             });
