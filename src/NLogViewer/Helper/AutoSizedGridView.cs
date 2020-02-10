@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Reactive.Linq;
+using System.Windows.Controls;
+using NLog;
 
 namespace DJ.Helper
 {
@@ -7,16 +10,32 @@ namespace DJ.Helper
     /// Used to fix the column width: https://stackoverflow.com/questions/60147905/column-width-adjustment-is-broken-if-using-multibinding-on-displaymemberbinding
     /// </summary>
     public class AutoSizedGridView : GridView
-    {        
+    {
+        private int _MaxLoggerNameLength;
+
         protected override void PrepareItem(ListViewItem item)
         {
-            foreach (GridViewColumn  column in Columns)
+            if (item.DataContext is LogEventInfo info)
             {
-                //setting NaN for the column width automatically determines the required width enough to hold the content completely.
-                //if column width was set to NaN already, set it ActualWidth temporarily and set to NaN. This raises the property change event and re computes the width.
-                if (double.IsNaN(column.Width)) column.Width = column.ActualWidth;
-                column.Width = double.NaN;              
-            }            
+                if (info.LoggerName.Length > _MaxLoggerNameLength)
+                {
+                    _MaxLoggerNameLength = info.LoggerName.Length;
+                    Observable.Timer(TimeSpan.FromMilliseconds(1)).ObserveOnDispatcher().Subscribe(l =>
+                    {
+                        foreach (GridViewColumn column in Columns)
+                        {
+                            //setting NaN for the column width automatically determines the required width enough to hold the content completely.
+                            //if column width was set to NaN already, set it ActualWidth temporarily and set to NaN. This raises the property change event and re computes the width.
+                            if (double.IsNaN(column.Width))
+                            {
+                                column.Width = column.ActualWidth;
+                                column.Width = double.NaN;
+                            }
+                        }
+                    });
+                }
+            }
+            
             base.PrepareItem(item);
         }
     }
