@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using DJ.Resolver;
 using DJ.Targets;
 using NLog;
 
@@ -27,27 +28,17 @@ namespace DJ
         // ##############################################################################################################################
 
         #region Dependency Properties
+            
+        // ##########################################################################################
+        // Colors
+        // ##########################################################################################
 
-        /// <summary>
-        /// MyComment
-        /// </summary>
-        [Category("NLogViewer")]
-        public CollectionViewSource LogEvents
-        {
-            get => (CollectionViewSource) GetValue(LogEventsProperty);
-            private set => SetValue(LogEventsProperty, value);
-        }
-
-        /// <summary>
-        /// The <see cref="LogEvents"/> DependencyProperty.
-        /// </summary>
-        public static readonly DependencyProperty LogEventsProperty = DependencyProperty.Register("LogEvents",
-            typeof(CollectionViewSource), typeof(NLogViewer), new PropertyMetadata(null));
+        #region Colors
 
         /// <summary>
         /// The background for the trace output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush TraceBackground
         {
             get => (Brush) GetValue(TraceBackgroundProperty);
@@ -64,7 +55,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the trace output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush TraceForeground
         {
             get => (Brush) GetValue(TraceForegroundProperty);
@@ -81,7 +72,7 @@ namespace DJ
         /// <summary>
         /// The background for the debug output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush DebugBackground
         {
             get => (Brush) GetValue(DebugBackgroundProperty);
@@ -98,7 +89,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the debug output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush DebugForeground
         {
             get => (Brush) GetValue(DebugForegroundProperty);
@@ -115,7 +106,7 @@ namespace DJ
         /// <summary>
         /// The background for the info output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush InfoBackground
         {
             get => (Brush) GetValue(InfoBackgroundProperty);
@@ -132,7 +123,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the info output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush InfoForeground
         {
             get => (Brush) GetValue(InfoForegroundProperty);
@@ -148,7 +139,7 @@ namespace DJ
         /// <summary>
         /// The background for the warn output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush WarnBackground
         {
             get => (Brush) GetValue(WarnBackgroundProperty);
@@ -165,7 +156,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the warn output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush WarnForeground
         {
             get => (Brush) GetValue(WarnForegroundProperty);
@@ -182,7 +173,7 @@ namespace DJ
         /// <summary>
         /// The background for the error output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush ErrorBackground
         {
             get => (Brush) GetValue(ErrorBackgroundProperty);
@@ -199,7 +190,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the error output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush ErrorForeground
         {
             get => (Brush) GetValue(ErrorForegroundProperty);
@@ -216,7 +207,7 @@ namespace DJ
         /// <summary>
         /// The background for the fatal output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush FatalBackground
         {
             get => (Brush) GetValue(FatalBackgroundProperty);
@@ -233,7 +224,7 @@ namespace DJ
         /// <summary>
         /// The foreground for the fatal output
         /// </summary>
-        [Category("NLogViewer")]
+        [Category("NLogViewerColors")]
         public Brush FatalForeground
         {
             get => (Brush) GetValue(FatalForegroundProperty);
@@ -246,6 +237,45 @@ namespace DJ
         public static readonly DependencyProperty FatalForegroundProperty =
             DependencyProperty.Register("FatalForeground", typeof(Brush), typeof(NLogViewer),
                 new PropertyMetadata(Brushes.Yellow));
+
+        #endregion
+        
+        // ##########################################################################################
+        // NLogViewer
+        // ##########################################################################################
+
+        #region NLogViewer
+
+        /// <summary>
+        /// Is looking if any target with this name is configured and tries to link it
+        /// </summary>
+        [Category("NLogViewer")]
+        public string TargetName
+        {
+            get => (string)GetValue(TargetNameProperty);
+            set => SetValue(TargetNameProperty, value);
+        }
+
+        /// <summary>
+        /// The <see cref="TargetName"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty TargetNameProperty = DependencyProperty.Register("TargetName", typeof(string), typeof(NLogViewer), new PropertyMetadata(null));
+        
+        /// <summary>
+        /// Private DP to bind to the gui
+        /// </summary>
+        [Category("NLogViewer")]
+        public CollectionViewSource LogEvents
+        {
+            get => (CollectionViewSource) GetValue(LogEventsProperty);
+            private set => SetValue(LogEventsProperty, value);
+        }
+
+        /// <summary>
+        /// The <see cref="LogEvents"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty LogEventsProperty = DependencyProperty.Register("LogEvents",
+            typeof(CollectionViewSource), typeof(NLogViewer), new PropertyMetadata(null));
         
         /// <summary>
         /// Automatically scroll to the newest entry
@@ -277,7 +307,7 @@ namespace DJ
         }
         
         /// <summary>
-        /// Delelte all entries
+        /// Delele all entries
         /// </summary>
         [Category("NLogViewer")]
         public ICommand ClearCommand
@@ -323,7 +353,79 @@ namespace DJ
         /// The <see cref="MaxCount"/> DependencyProperty.
         /// </summary>
         public static readonly DependencyProperty MaxCountProperty = DependencyProperty.Register("MaxCount", typeof(int), typeof(NLogViewer), new PropertyMetadata(5000));
+
+
+        #endregion
+
+        // ##########################################################################################
+        // Resolver
+        // ##########################################################################################
+
+        #region Resolver
         
+        /// <summary>
+        /// The <see cref="ILogEventInfoResolver"/> to format the id
+        /// </summary>
+        [Category("NLogViewerResolver")]
+        public ILogEventInfoResolver IdResolver
+        {
+            get => (ILogEventInfoResolver)GetValue(IdResolverProperty);
+            set => SetValue(IdResolverProperty, value);
+        }
+
+        /// <summary>
+        /// The <see cref="IdResolver"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty IdResolverProperty = DependencyProperty.Register("IdResolver", typeof(ILogEventInfoResolver), typeof(NLogViewer), new PropertyMetadata(new IdResolver()));
+        
+        /// <summary>
+        /// The <see cref="ILogEventInfoResolver"/> to format the timestamp output
+        /// </summary>
+        [Category("NLogViewerResolver")]
+        public ILogEventInfoResolver TimeStampResolver
+        {
+            get => (ILogEventInfoResolver)GetValue(TimeStampResolverProperty);
+            set => SetValue(TimeStampResolverProperty, value);
+        }
+
+        /// <summary>
+        /// The <see cref="TimeStampResolver"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty TimeStampResolverProperty = DependencyProperty.Register("TimeStampResolver", typeof(ILogEventInfoResolver), typeof(NLogViewer), new PropertyMetadata(new TimeStampResolver()));
+        
+        /// <summary>
+        /// The <see cref="ILogEventInfoResolver"/> to format the loggername
+        /// </summary>
+        [Category("NLogViewerResolver")]
+        public ILogEventInfoResolver LoggerNameResolver
+        {
+            get => (ILogEventInfoResolver)GetValue(LoggerNameResolverProperty);
+            set => SetValue(LoggerNameResolverProperty, value);
+        }
+
+        /// <summary>
+        /// The <see cref="LoggerNameResolver"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty LoggerNameResolverProperty = DependencyProperty.Register("LoggerNameResolver", typeof(ILogEventInfoResolver), typeof(NLogViewer), new PropertyMetadata(new LoggerNameResolver()));
+        
+        /// <summary>
+        /// The <see cref="ILogEventInfoResolver"/> to format the message
+        /// </summary>
+        [Category("NLogViewerResolver")]
+        public ILogEventInfoResolver MessageResolver
+        {
+            get => (ILogEventInfoResolver)GetValue(MessageResolverProperty);
+            set => SetValue(MessageResolverProperty, value);
+        }
+
+        /// <summary>
+        /// The <see cref="MessageResolver"/> DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty MessageResolverProperty = DependencyProperty.Register("MessageResolver", typeof(ILogEventInfoResolver), typeof(NLogViewer), new PropertyMetadata(new MessageResolver()));
+        
+        #endregion
+
+
         #endregion
 
         // ##############################################################################################################################
@@ -367,8 +469,13 @@ namespace DJ
             
             Loaded += _OnLoaded;
             ClearCommand = new ActionCommand(_LogEventInfos.Clear);
+        }
 
-            var target = CacheTarget.GetInstance();
+        private void _OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ListView.ScrollToEnd();
+
+            var target = CacheTarget.GetInstance(targetName: TargetName);
             
             target.Cache.SubscribeOn(Scheduler.Default).Buffer(TimeSpan.FromMilliseconds(100)).Where (x => x.Any()).ObserveOnDispatcher(DispatcherPriority.Background).Subscribe(infos =>
             {
@@ -393,11 +500,6 @@ namespace DJ
                     ListView?.ScrollToEnd();
                 }
             });
-        }
-
-        private void _OnLoaded(object sender, RoutedEventArgs e)
-        {
-            ListView.ScrollToEnd();
         }
 
         #endregion
