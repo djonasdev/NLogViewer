@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows;
+using DJ.Resolver;
 using NLog;
 
 namespace TestApplication
@@ -17,6 +18,10 @@ namespace TestApplication
         {
             Title = $"Testing v{AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}";
             InitializeComponent();
+            DataContext = this;
+
+            NLogViewer1.TimeStampResolver = new FooTimeStampResolver();
+
             Random random = new Random();
             Observable.Interval(TimeSpan.FromMilliseconds(250)).ObserveOnDispatcher().Subscribe(l =>
             {
@@ -51,6 +56,14 @@ namespace TestApplication
                         break;
                 }
             });
+        }
+    }
+
+    public class FooTimeStampResolver : ILogEventInfoResolver
+    {
+        public string Resolve(LogEventInfo logEventInfo)
+        {
+            return logEventInfo.TimeStamp.ToUniversalTime().ToString();
         }
     }
 }
