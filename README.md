@@ -3,8 +3,8 @@
 [3]: https://github.com/yarseyah/sentinel#nlogs-nlogviewer-target-configuration
 
 [p1]: doc/images/control.png "NLogViewer"
-[p2]: doc/images/preview.gif "NLogViewer"
-[p3]: doc/images/control2.png "NLogViewer"
+[p2]: doc/images/live.gif "NLogViewer"
+[p3]: doc/images/colors.png "NLogViewer"
 
 [nuget]: https://nuget.org/packages/Sentinel.NlogViewer/
 
@@ -20,16 +20,9 @@ NlogViewer
 
 NlogViewer is a ui control library to visualize NLog logs in your personal application. It is mainly based on [Sentinel][1] and its controls.
 
+supported Frameworks: `.NETCoreApp v3.0`, `.NETCoreApp v3.1`, `.NET Framework 4.6.1`
+
 ![NLogViewer][p2]
-
-Actually it contains the following controls:
-
-- `NLogViewer`
-
-Visual Studio
-
-![NLogViewer][p1]
-![NLogViewer][p3]
 
 ## Quick Start
 
@@ -70,6 +63,60 @@ If you want to customize the `loggingPattern` and `LogLevel`, add the following 
     <logger name="*" writeTo="cache" minlevel="Debug"/> 
   </rules>
 </nlog>
+```
+
+## Customize
+
+### Colors
+
+Customize `foreground` or `background` of every `logLevel`
+
+![NLogViewer][p3]
+
+### Multi targeting
+
+Use more than one instance of `NLogViewer` to match different `rules`.
+
+Create 2 `targets` with their own `rules`.
+
+```xml
+<targets async="true">
+  <target xsi:type="CacheTarget" name="target1"/>
+  <target xsi:type="CacheTarget" name="target2"/>
+</targets>
+
+<rules>
+  <logger name="*" writeTo="target1" maxlevel="Info"/> 
+  <logger name="*" writeTo="target2" minlevel="Warn"/> 
+</rules>
+```
+
+Set `TargetName` property to link them.
+
+```xml
+<dj:NLogViewer TargetName="target1"/>
+<dj:NLogViewer TargetName="target2"/>
+```
+
+### Format output (ILogEventInfoResolver)
+
+To format the output of a `LogEventInfo`, implement a new instance of `ILogEventInfoResolver` and bind it to the `Resolver` you want to customize:
+
+```csharp
+/// <summary>
+/// Reformat the DateTime
+/// </summary>
+public class FooTimeStampResolver : ILogEventInfoResolver
+{
+    public string Resolve(LogEventInfo logEventInfo)
+    {
+        return logEventInfo.TimeStamp.ToUniversalTime().ToString();
+    }
+}
+```
+
+```csharp
+NLogViewer1.TimeStampResolver = new FooTimeStampResolver();
 ```
 
 ## Why CacheTarget?
