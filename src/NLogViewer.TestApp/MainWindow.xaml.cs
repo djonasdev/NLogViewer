@@ -68,6 +68,9 @@ namespace TestApplication
         }
     }
 
+    /// <summary>
+    /// Reformat the DateTime
+    /// </summary>
     public class FooTimeStampResolver : ILogEventInfoResolver
     {
         public string Resolve(LogEventInfo logEventInfo)
