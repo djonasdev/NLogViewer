@@ -445,7 +445,7 @@ namespace DJ
         // ##########################################################################################
 
         private ObservableCollection<LogEventInfo> _LogEventInfos { get; } = new ObservableCollection<LogEventInfo>();
-
+        private IDisposable _Subscription; 
 
 
 
@@ -471,13 +471,42 @@ namespace DJ
             ClearCommand = new ActionCommand(_LogEventInfos.Clear);
         }
 
+        private void _ParentWindowOnClosed(object? sender, EventArgs e)
+        {
+            _Dispose();
+        }
+
+        // check if the parent visual has been changed
+        // can happen if you use the control on a page
+        protected override void OnVisualParentChanged(DependencyObject oldParent)
+        {
+            if (oldParent != null)
+            {
+                _Dispose();
+            }
+            base.OnVisualParentChanged(oldParent);
+        }
+
+        private void _Dispose()
+        {
+            _Subscription?.Dispose();
+        }
+        
         private void _OnLoaded(object sender, RoutedEventArgs e)
         {
+            // removed loaded handler to prevent duplicate subscribing
+            Loaded -= _OnLoaded;
+
+            // add hook to parent window to dispose subscription
+            var parentWindow = Window.GetWindow(this);
+            if(parentWindow != null)
+                parentWindow.Closed += _ParentWindowOnClosed;
+
             ListView.ScrollToEnd();
 
             var target = CacheTarget.GetInstance(targetName: TargetName);
             
-            target.Cache.SubscribeOn(Scheduler.Default).Buffer(TimeSpan.FromMilliseconds(100)).Where (x => x.Any()).ObserveOnDispatcher(DispatcherPriority.Background).Subscribe(infos =>
+            _Subscription = target.Cache.SubscribeOn(Scheduler.Default).Buffer(TimeSpan.FromMilliseconds(100)).Where (x => x.Any()).ObserveOnDispatcher(DispatcherPriority.Background).Subscribe(infos =>
             {
                 if (Pause) return;
                 using (LogEvents.DeferRefresh())

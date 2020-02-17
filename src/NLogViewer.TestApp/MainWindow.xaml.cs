@@ -66,6 +66,12 @@ namespace TestApplication
                 }
             });
         }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            TestPopup popup = new TestPopup();
+            popup.Show();
+        }
     }
 
     /// <summary>
