@@ -446,9 +446,7 @@ namespace DJ
 
         private ObservableCollection<LogEventInfo> _LogEventInfos { get; } = new ObservableCollection<LogEventInfo>();
         private IDisposable _Subscription; 
-
-
-
+        
         #endregion
 
         // ##############################################################################################################################
