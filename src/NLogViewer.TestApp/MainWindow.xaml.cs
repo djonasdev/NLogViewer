@@ -16,6 +16,11 @@ namespace TestApplication
         
         private readonly Logger _Logger = LogManager.GetCurrentClassLogger();
         private readonly Logger _Logger2 = LogManager.GetLogger("Lorem.Ipsum.Foo.Hello.World.Lorem.Ipsum");
+
+        private int _CntMessage;
+        private int _CntError;
+
+
         public MainWindow()
         {
             Title = $"Testing v{AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}";
@@ -27,28 +32,36 @@ namespace TestApplication
             Random random = new Random();
            Observable.Interval(TimeSpan.FromMilliseconds(200)).ObserveOnDispatcher().Subscribe(l =>
             {
+                if((_CntMessage == 10 || _CntError == 20) && TabControl1.Items.Count > 0)
+                    TabControl1.Items.RemoveAt(0);
                 switch (random.Next(1,6))
                 {
                     case 1:
-                        _Logger.Trace("Hello everyone");
+                        _CntMessage++;
+                        _Logger.Trace($"Hello everyone: {_CntMessage}");
                         break;
                     case 2:
+                        _CntMessage++;
                         if (stopwatch.Elapsed.Seconds > 5)
                         {
-                            _Logger2.Debug("Hello everyone");
+                            _Logger2.Debug($"Hello everyone: {_CntMessage}");
                         }
                         else
                         {
-                            _Logger.Debug("Hello everyone");
+                            _Logger.Debug($"Hello everyone: {_CntMessage}");
                         }
                         break;
                     case 3:
-                        _Logger.Info("Hello everyone");
+                        _CntMessage++;
+                        _Logger.Info($"Hello everyone: {_CntMessage}");
                         break;
                     case 4:
-                        _Logger.Warn("Hello everyone");
+                        _CntError++;
+                        _Logger.Warn($"Hello everyone: {_CntError}");
                         break;
                     case 5:
+                        _CntError++;
+
                         try
                         {
                             int a = 0;
@@ -57,11 +70,12 @@ namespace TestApplication
                         }
                         catch (Exception ex)
                         {
-                            _Logger.Error(ex, "There was an error on divison :/");
+                            _Logger.Error(ex, $"There was an error on divison :/ {_CntError}");
                         }
                         break;
                     case 6:
-                        _Logger.Fatal(LOREM_IPSUM);
+                        _CntError++;
+                        _Logger.Fatal($"{_CntError}\n{LOREM_IPSUM}");
                         break;
                 }
             });
