@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -12,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using DJ.Extensions;
 using DJ.Resolver;
 using DJ.Targets;
 using NLog;
@@ -445,7 +444,8 @@ namespace DJ
         // ##########################################################################################
 
         private ObservableCollection<LogEventInfo> _LogEventInfos { get; } = new ObservableCollection<LogEventInfo>();
-        private IDisposable _Subscription; 
+        private IDisposable _Subscription;
+        private Window _ParentWindow;
         
         #endregion
 
@@ -459,6 +459,9 @@ namespace DJ
         {
             InitializeComponent();
             DataContext = this;
+            
+            // save instance UID
+            Uid = GetHashCode().ToString();
 
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
@@ -466,23 +469,22 @@ namespace DJ
             LogEvents = new CollectionViewSource {Source = _LogEventInfos};
             
             Loaded += _OnLoaded;
+            Unloaded += _OnUnloaded;
             ClearCommand = new ActionCommand(_LogEventInfos.Clear);
         }
 
-        private void _ParentWindowOnClosed(object? sender, EventArgs e)
+        private void _OnUnloaded(object sender, RoutedEventArgs e)
         {
-            _Dispose();
-        }
-
-        // check if the parent visual has been changed
-        // can happen if you use the control on a page
-        protected override void OnVisualParentChanged(DependencyObject oldParent)
-        {
-            if (oldParent != null)
+            // look in logical and visual tree if the control has been removed
+            if (_ParentWindow.FindChildByUid<NLogViewer>(Uid) == null)
             {
                 _Dispose();
             }
-            base.OnVisualParentChanged(oldParent);
+        }
+        
+        private void _ParentWindowOnClosed(object sender, EventArgs e)
+        {
+            _Dispose();
         }
 
         private void _Dispose()
@@ -496,12 +498,10 @@ namespace DJ
             Loaded -= _OnLoaded;
 
             // add hook to parent window to dispose subscription
-            var parentWindow = Window.GetWindow(this);
-            if(parentWindow != null)
-                parentWindow.Closed += _ParentWindowOnClosed;
+            _ParentWindow = Window.GetWindow(this);
+            _ParentWindow.Closed += _ParentWindowOnClosed;
 
             ListView.ScrollToEnd();
-
             var target = CacheTarget.GetInstance(targetName: TargetName);
             
             _Subscription = target.Cache.SubscribeOn(Scheduler.Default).Buffer(TimeSpan.FromMilliseconds(100)).Where (x => x.Any()).ObserveOnDispatcher(DispatcherPriority.Background).Subscribe(infos =>
