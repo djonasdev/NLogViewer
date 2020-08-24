@@ -8,24 +8,30 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="5" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TabControl Grid.RowSpan="10" x:Name="TabControl1">
-            <TabItem Header="Messages">
-                <dj:NLogViewer x:Name="NLogViewer1" Grid.Row="2" MaxCount="1000" TargetName="target1" />
-            </TabItem>
-            <TabItem Header="Warnings/Errors">
-                <dj:NLogViewer Grid.Row="6" MaxCount="1000" TargetName="target2" />
-            </TabItem>
-        </TabControl>
-        <!--<TextBlock Grid.Row="0" Text="Target 1" FontSize="18" />
-        <TextBlock Grid.Row="4" Text="Target 2 (Warn and Error)" FontSize="18" />
-        <Button Grid.Row="0" Grid.RowSpan="2" Margin="5" Content="Open Popup" HorizontalAlignment="Right"
-                VerticalAlignment="Top" Click="ButtonBase_OnClick" />-->
+        <WrapPanel Grid.Row="0" Margin="5">
+            <Button DockPanel.Dock="Left" Width="120" Content="Open Popup" Click="Button_OpenPopup_Click" />
+            <Button DockPanel.Dock="Left" Width="120" Content="Add new Task" Click="Button_AddTask_Click" Margin="5,0,0,0"/>
+        </WrapPanel>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TabControl Grid.RowSpan="10" x:Name="TabControl1">
+                <TabItem Header="Messages">
+                    <dj:NLogViewer x:Name="NLogViewer1" Grid.Row="2" MaxCount="1000" TargetName="target1" />
+                </TabItem>
+                <TabItem Header="Warnings/Errors">
+                    <dj:NLogViewer Grid.Row="6" MaxCount="1000" TargetName="target2" />
+                </TabItem>
+            </TabControl>
+        </Grid>
     </Grid>
 </Window>
