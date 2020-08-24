@@ -3,8 +3,10 @@
 [3]: https://github.com/yarseyah/sentinel#nlogs-nlogviewer-target-configuration
 
 [p1]: doc/images/control.png "NLogViewer"
-[p2]: doc/images/live.gif "NLogViewer"
+[p2]: doc/images/overview.gif "NLogViewer"
 [p3]: doc/images/colors.png "NLogViewer"
+[p4]: doc/images/openpopup.gif "NLogViewer"
+[p5]: doc/images/newtask.gif "NLogViewer"
 
 [nuget]: https://nuget.org/packages/Sentinel.NlogViewer/
 
@@ -117,6 +119,82 @@ public class FooTimeStampResolver : ILogEventInfoResolver
 
 ```csharp
 NLogViewer1.TimeStampResolver = new FooTimeStampResolver();
+```
+
+## Samples
+
+### open on a new window
+
+![NLogViewer][p4]
+
+Create a new `Window` and add a default `NLogViewer`
+
+```csharp
+<dj:NLogViewer TargetName="target1"/>
+```
+
+Open the new `Window`
+
+```csharp
+TestPopup popup = new TestPopup();
+popup.Show();
+```
+
+### seperate logger for a task
+
+![NLogViewer][p5]
+
+Below is a sample how you could create a `NLogViewer` for a task
+
+```csharp
+// create unique target name
+var taskNumber = _RandomTaskCounter++;
+string targetName = $"task{taskNumber}";
+// create a unique logger
+var loggerName = $"MyFoo.Logger.{taskNumber}";
+var logger = LogManager.GetLogger(loggerName);
+
+// create new CacheTarget
+CacheTarget target = new CacheTarget
+{
+    Name = targetName
+};
+
+// get config // https://stackoverflow.com/a/3603571/6229375
+var config = LogManager.Configuration;
+
+// add target
+config.AddTarget(targetName, target);
+
+// create a logging rule for the new logger
+LoggingRule loggingRule = new LoggingRule(loggerName, LogLevel.Trace, target);
+
+// add the logger to the existing configuration
+config.LoggingRules.Add(loggingRule);
+
+// reassign config back to NLog
+LogManager.Configuration = config;
+
+// create a new NLogViewer Control with the unique logger target name
+NLogViewer nLogViewer = new NLogViewer
+{
+    TargetName = targetName,
+};
+
+// add it to the tab control
+var tabItem = new TabItem { Header = $"Task {taskNumber}", Content = nLogViewer };
+TabControl1.Items.Add(tabItem);
+TabControl1.SelectedItem = tabItem;
+
+// create task which produces some output
+var task = new Task(async () =>
+{
+    while (true)
+    {
+        logger.Info($"Hello from task nr. {taskNumber}. It's {DateTime.Now.ToLongTimeString()}");
+        await Task.Delay(1000);
+    }
+});
 ```
 
 ## Why CacheTarget?
