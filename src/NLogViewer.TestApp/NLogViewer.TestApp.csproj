@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Content Include="nlog.config">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
