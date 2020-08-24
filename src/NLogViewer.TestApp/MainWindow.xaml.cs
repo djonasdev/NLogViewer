@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using DJ;
 using DJ.Resolver;
+using DJ.Targets;
 using NLog;
+using NLog.Config;
+using NLog.Filters;
 
 namespace TestApplication
 {
@@ -13,7 +19,7 @@ namespace TestApplication
     public partial class MainWindow : Window
     {
         public const string LOREM_IPSUM = @"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-        
+
         private readonly Logger _Logger = LogManager.GetCurrentClassLogger();
         private readonly Logger _Logger2 = LogManager.GetLogger("Lorem.Ipsum.Foo.Hello.World.Lorem.Ipsum");
 
@@ -26,15 +32,15 @@ namespace TestApplication
             Title = $"Testing v{AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}";
             InitializeComponent();
             DataContext = this;
-
+            
             NLogViewer1.TimeStampResolver = new FooTimeStampResolver();
             Stopwatch stopwatch = Stopwatch.StartNew();
             Random random = new Random();
-           Observable.Interval(TimeSpan.FromMilliseconds(200)).ObserveOnDispatcher().Subscribe(l =>
+            Observable.Interval(TimeSpan.FromMilliseconds(200)).ObserveOnDispatcher().Subscribe(l =>
             {
-                if((_CntMessage == 10 || _CntError == 20) && TabControl1.Items.Count > 0)
-                    TabControl1.Items.RemoveAt(0);
-                switch (random.Next(1,6))
+                //if((_CntMessage == 10 || _CntError == 20) && TabControl1.Items.Count > 0)
+                //    TabControl1.Items.RemoveAt(0);
+                switch (random.Next(1, 6))
                 {
                     case 1:
                         _CntMessage++;
@@ -50,6 +56,7 @@ namespace TestApplication
                         {
                             _Logger.Debug($"Hello everyone: {_CntMessage}");
                         }
+
                         break;
                     case 3:
                         _CntMessage++;
@@ -72,6 +79,7 @@ namespace TestApplication
                         {
                             _Logger.Error(ex, $"There was an error on divison :/ {_CntError}");
                         }
+
                         break;
                     case 6:
                         _CntError++;
@@ -81,10 +89,69 @@ namespace TestApplication
             });
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void Button_OpenPopup_Click(object sender, RoutedEventArgs e)
         {
             TestPopup popup = new TestPopup();
             popup.Show();
+        }
+
+        private void Button_AddTask_Click(object sender, RoutedEventArgs e)
+        {
+            AddNewTabWithLogger().Start();
+        }
+
+        private int _RandomTaskCounter;
+        private Task AddNewTabWithLogger()
+        {
+            // create unique target name
+            var taskNumber = _RandomTaskCounter++;
+            string targetName = $"task{taskNumber}";
+            // create a unique logger
+            var loggerName = $"MyFoo.Logger.{taskNumber}";
+            var logger = LogManager.GetLogger(loggerName);
+
+            // create new CacheTarget
+            CacheTarget target = new CacheTarget
+            {
+                Name = targetName
+            };
+
+            // get config // https://stackoverflow.com/a/3603571/6229375
+            var config = LogManager.Configuration;
+
+            // add target
+            config.AddTarget(targetName, target);
+
+            // create a logging rule for the new logger
+            LoggingRule loggingRule = new LoggingRule(loggerName, LogLevel.Trace, target);
+
+            // add the logger to the existing configuration
+            config.LoggingRules.Add(loggingRule);
+
+            // reassign config back to NLog
+            LogManager.Configuration = config;
+
+            // create a new NLogViewer Control with the unique logger target name
+            NLogViewer nLogViewer = new NLogViewer
+            {
+                TargetName = targetName,
+            };
+
+            // add it to the tab control
+            var tabItem = new TabItem { Header = $"Task {taskNumber}", Content = nLogViewer };
+            TabControl1.Items.Add(tabItem);
+            TabControl1.SelectedItem = tabItem;
+
+            // create task which produces some output
+            var task = new Task(async () =>
+            {
+                while (true)
+                {
+                    logger.Info($"Hello from task nr. {taskNumber}. It's {DateTime.Now.ToLongTimeString()}");
+                    await Task.Delay(1000);
+                }
+            });
+            return task;
         }
     }
 
