@@ -9,7 +9,18 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>sentinel nlog</PackageTags>
     <Description>NlogViewer is a ui control library to visualize NLog logs</Description>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)/LICENSE.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>LICENSE.md</PackagePath>
+      <Visible>false</Visible>
+    </Content>
+  </ItemGroup>
 
   <!--When the GitVersion_SemVer variable is already set (via environment), disable the GitVersion Tasks and set the version properties-->
   <PropertyGroup Condition=" '$(GitVersion_SemVer)' != '' ">
