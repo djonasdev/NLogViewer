@@ -19,7 +19,7 @@ jobs:
     - name: Build solution
       run: dotnet build -c Release
     - name: Create NuGet packages
-      run: dotnet pack -c Release --no-build -o nupkg 
+      run: dotnet pack "src/NLogViewer" --no-build -o nupkg 
     - name: Upload nuget packages
       uses: actions/upload-artifact@v1
       with:
