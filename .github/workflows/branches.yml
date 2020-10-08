@@ -10,7 +10,6 @@ env:
 jobs:
   build:
     name: Build
-    needs: generateVersionInfo
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
