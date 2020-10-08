@@ -476,16 +476,8 @@ namespace DJ
         private void _OnUnloaded(object sender, RoutedEventArgs e)
         {
             // look in logical and visual tree if the control has been removed
-            // If there is no parent window found before, we have a special case and just dispose it anyway
-            if (_ParentWindow != null)
-            {
-                if (_ParentWindow.FindChildByUid<NLogViewer>(Uid) == null)
-                {
-                    _Dispose();
-                }
-            }
-            // see: https://github.com/dojo90/NLogViewer/issues/30
-            else
+            // If there is no parent window found before, we have a special case (https://github.com/dojo90/NLogViewer/issues/30) and just dispose it anyway
+            if (_ParentWindow.FindChildByUid<NLogViewer>(Uid) == null)
             {
                 _Dispose();
             }
