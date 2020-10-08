@@ -476,7 +476,16 @@ namespace DJ
         private void _OnUnloaded(object sender, RoutedEventArgs e)
         {
             // look in logical and visual tree if the control has been removed
-            if (_ParentWindow.FindChildByUid<NLogViewer>(Uid) == null)
+            // If there is no parent window found before, we have a special case and just dispose it anyway
+            if (_ParentWindow != null)
+            {
+                if (_ParentWindow.FindChildByUid<NLogViewer>(Uid) == null)
+                {
+                    _Dispose();
+                }
+            }
+            // see: https://github.com/dojo90/NLogViewer/issues/30
+            else
             {
                 _Dispose();
             }
@@ -498,8 +507,14 @@ namespace DJ
             Loaded -= _OnLoaded;
 
             // add hook to parent window to dispose subscription
-            _ParentWindow = Window.GetWindow(this);
-            _ParentWindow.Closed += _ParentWindowOnClosed;
+            // use case:
+            // NLogViewer is used in a new window inside of a TabControl. If you switch the TabItems,
+            // the unloaded event is called and would dispose the subscription, even if the control is still alive.
+            if (Window.GetWindow(this) is { } window)
+            {
+                _ParentWindow = window;
+                _ParentWindow.Closed += _ParentWindowOnClosed;
+            }
 
             ListView.ScrollToEnd();
             var target = CacheTarget.GetInstance(targetName: TargetName);
