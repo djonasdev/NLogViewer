@@ -18,10 +18,10 @@ jobs:
         fetch-depth: 0
     - name: Build solution
       run: dotnet build -c Release
-    - name: Create NuGet packages
-      run: dotnet pack "src/NLogViewer" --no-build -o nupkg 
+    - name: Fetch NuGet packages
+      run: mkdir -p nuget && cp src\NLogViewer\bin\Release\*.nupkg nuget\
     - name: Upload nuget packages
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: nupkg
         path: nupkg
