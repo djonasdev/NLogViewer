@@ -21,9 +21,10 @@ jobs:
     - name: Fetch nuget packages
       run: |
         mkdir -p nuget
-        cp src\NLogViewer\bin\Release\*.nupkg nuget\
+        copy src\NLogViewer\bin\Release\*.nupkg nuget\
     - name: Upload nuget packages as artifacts
       uses: actions/upload-artifact@v2
       with:
         name: nupkg
-        path: nupkg
+        path: nuget
+        if-no-files-found: error
