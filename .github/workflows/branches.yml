@@ -35,14 +35,14 @@ publish:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-        uses: actions/checkout@v2
-        with:
-            fetch-depth: 0
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Download nuget artifacts
-        uses: actions/download-artifact@v2
-        with:
+      uses: actions/download-artifact@v2
+      with:
         name: nupkg
     - name: Publish the package to GitHub Packages    
-        run: |
+      run: |
         dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text
         dotnet nuget push **/*.nupkg --source github
