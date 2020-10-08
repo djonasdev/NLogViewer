@@ -18,9 +18,10 @@ jobs:
         fetch-depth: 0
     - name: Build solution
       run: dotnet build -c Release
-    - name: Fetch NuGet packages
-      run: mkdir -p nuget && cp src\NLogViewer\bin\Release\*.nupkg nuget\
-    - name: Upload nuget packages
+    - name: Fetch nuget packages
+      run: mkdir -p nuget
+           cp src\NLogViewer\bin\Release\*.nupkg nuget\
+    - name: Upload nuget packages as artifacts
       uses: actions/upload-artifact@v2
       with:
         name: nupkg
