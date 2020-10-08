@@ -14,8 +14,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Restore dotnet tools
-      run: dotnet tool restore
+      with:
+        fetch-depth: 0
     - name: Build solution
       run: dotnet build -c Release
     - name: Create NuGet packages
