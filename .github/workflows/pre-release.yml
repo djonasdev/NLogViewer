@@ -11,7 +11,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: $GITHUB_REF
+        fetch-depth: 0
+        ref: ${{ github.ref }}
     - name: Build solution
       run: dotnet build -c Release
     - name: Fetch nuget packages
