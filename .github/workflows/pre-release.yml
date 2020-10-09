@@ -10,6 +10,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Build solution
       run: dotnet build -c Release
     - name: Fetch nuget packages
@@ -37,4 +39,3 @@ jobs:
   #       dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text
   #       dotnet nuget push **/*.nupkg --source github
 
-  
