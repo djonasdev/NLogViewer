@@ -26,16 +26,18 @@ jobs:
         path: nuget
         if-no-files-found: error
 
-  # publish:
-  #   name: Publish
-  #   needs: [build]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Download nuget artifacts
-  #     uses: actions/download-artifact@v2
-  #     with:
-  #       name: nupkg
-  #   - name: Publish the package to GitHub Packages    
-  #     run: |
-  #       dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text
-  #       dotnet nuget push **/*.nupkg --source github
+  publish:
+    name: Publish
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download nuget artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: nupkg
+    - name: Publish the package to GitHub Packages    
+      run: |
+        dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text
+        dotnet nuget add source https://api.nuget.org/v3/index.json --name nuget --api-key ${{ secrets.NUGET_API_KEY }}
+        dotnet nuget push **/*.nupkg --source github
+        dotnet nuget push **/*.nupkg --source nuget
