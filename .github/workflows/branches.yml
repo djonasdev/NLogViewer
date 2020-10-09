@@ -1,0 +1,30 @@
+name: Branch workflow
+on: 
+  push:
+    branches-ignore:
+      - master
+  pull_request:
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true  
+  MSBUILDSINGLELOADCONTEXT: 1
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Build solution
+      run: dotnet build -c Release
+    - name: Fetch nuget packages
+      run: |
+        mkdir -p nuget
+        copy src\NLogViewer\bin\Release\*.nupkg nuget\
+    - name: Upload nuget packages as artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: nuget
+        if-no-files-found: error
