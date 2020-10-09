@@ -11,7 +11,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        ref: $GITHUB_REF
+        ref: ${GITHUB_REF}
     - name: Build solution
       run: dotnet build -c Release
     - name: Fetch nuget packages
