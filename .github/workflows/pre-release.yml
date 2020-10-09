@@ -1,4 +1,4 @@
-name: publish pre-release workflow
+name: publish pre-release
 on: [workflow_dispatch]
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true  
@@ -11,7 +11,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        fetch-depth: 0
+        ref: $GITHUB_REF
     - name: Build solution
       run: dotnet build -c Release
     - name: Fetch nuget packages
@@ -38,4 +38,3 @@ jobs:
   #     run: |
   #       dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text
   #       dotnet nuget push **/*.nupkg --source github
-
