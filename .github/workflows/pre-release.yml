@@ -1,4 +1,4 @@
-name: publish pre-release workflow
+name: publish pre-release
 on: [workflow_dispatch]
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true  
@@ -11,7 +11,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        fetch-depth: 0
+        ref: ${GITHUB_HEAD_REF}
     - name: Build solution
       run: dotnet build -c Release
     - name: Fetch nuget packages

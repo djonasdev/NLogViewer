@@ -1,4 +1,4 @@
-name: Branch workflow
+name: Commit
 on: 
   push:
     branches-ignore:
