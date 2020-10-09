@@ -2,7 +2,6 @@ name: publish pre-release
 on: [workflow_dispatch]
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true  
-  MSBUILDSINGLELOADCONTEXT: 1
 jobs:
   build:
     name: Build
