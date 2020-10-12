@@ -1,0 +1,66 @@
+name: Release
+on:
+  push:
+    tags:
+      - '*'
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true  
+  jobs:
+    build:
+      name: Build
+      runs-on: windows-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Build solution
+        run: dotnet build -c Release
+      - name: Fetch nuget packages
+        run: |
+          mkdir -p nuget
+          copy src\NLogViewer\bin\Release\*.nupkg nuget\
+      - name: Upload nuget packages as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: nupkg
+          path: nuget
+          if-no-files-found: error
+    publish:
+      name: Publish
+      needs: [build]
+      runs-on: ubuntu-latest
+      steps:
+      - name: Download nuget artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: nupkg
+          path: nuget
+      - name: Get release
+        id: get_release
+        uses: bruceadams/get-release@v1.2.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifacts to release
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const path = require('path');
+            const fs = require('fs');
+            const release_id = '${{ steps.get_release.outputs.id }}';
+            for (let file of await fs.readdirSync('./nuget')) {
+              console.log('uploadReleaseAsset', file);
+              await github.repos.uploadReleaseAsset({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: release_id,
+                name: file,
+                data: await fs.readFileSync(`./nuget/${file}`)
+              });
+            }
+      - name: Publish the package to GitHub Packages & nuget.org    
+        run: |
+          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text
+          dotnet nuget push ./nuget/*.nupkg --source github
+          dotnet nuget push ./nuget/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
