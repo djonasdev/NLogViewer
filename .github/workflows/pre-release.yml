@@ -1,0 +1,42 @@
+name: publish pre-release
+on: [workflow_dispatch]
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true  
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        ref: ${{ github.ref }}
+    - name: Build solution
+      run: dotnet build -c Release
+    - name: Fetch nuget packages
+      run: |
+        mkdir -p nuget
+        copy src\NLogViewer\bin\Release\*.nupkg nuget\
+    - name: Upload nuget packages as artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: nuget
+        if-no-files-found: error
+
+  publish:
+    name: Publish
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download nuget artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: nupkg
+        path: nuget
+    - name: Publish the package to GitHub Packages & nuget.org    
+      run: |
+        dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text
+        dotnet nuget push ./nuget/*.nupkg --source github
+        dotnet nuget push ./nuget/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
