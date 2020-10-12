@@ -34,8 +34,9 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: nupkg
+        path: nuget
     - name: Publish the package to GitHub Packages & nuget.org    
       run: |
         dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text
-        dotnet nuget push **/*.nupkg --source github
-        dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        dotnet nuget push ./nuget/*.nupkg --source github
+        dotnet nuget push ./nuget/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
