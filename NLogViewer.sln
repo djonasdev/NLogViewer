@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLogViewer.TestApp", "src\N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLogViewer", "src\NLogViewer\NLogViewer.csproj", "{D1C5763C-DA9C-43E0-B7EA-DDC9AAA90AE7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2FF9C764-5BB9-4E66-B48B-6B7D746EA817}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.build.props = Directory.build.props
+		GitVersion.yml = GitVersion.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
