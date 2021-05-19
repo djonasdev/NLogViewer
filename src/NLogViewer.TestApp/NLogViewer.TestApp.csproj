@@ -7,6 +7,7 @@
     <StartupObject>TestApplication.App</StartupObject>
     <RootNamespace>TestApplication</RootNamespace>
     <AssemblyName>TestApp</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>

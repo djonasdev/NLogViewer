@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net472</TargetFrameworks>
@@ -6,6 +6,7 @@
     <RootNamespace>DJ</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Sentinel.NLogViewer</PackageId>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -80,15 +81,7 @@
     <PackageReference Include="NLog" Version="4.7.10" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <Resource Include="Images\Glyphs\SortDownArrow.png" />
     <Resource Include="Images\Glyphs\SortUpArrow.png" />
