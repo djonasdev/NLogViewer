@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,7 +30,7 @@ namespace TestApplication
 
         public MainWindow()
         {
-            Title = $"Testing v{AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}";
+            Title = $"NLogViewer TestApp v{Assembly.GetEntryAssembly().GetName().Version} - framework v{AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName}";
             InitializeComponent();
             DataContext = this;
             
