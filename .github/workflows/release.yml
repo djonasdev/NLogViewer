@@ -20,10 +20,11 @@ jobs:
       run: |
         mkdir -p nuget
         copy src\NLogViewer\bin\Release\*.nupkg nuget\
+        copy src\NLogViewer\bin\Release\*.snupkg nuget\
     - name: Upload nuget packages as artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: nupkg
+        name: NuGet
         path: nuget
         if-no-files-found: error
   publish:
@@ -34,7 +35,7 @@ jobs:
     - name: Download nuget artifacts
       uses: actions/download-artifact@v2
       with:
-        name: nupkg
+        name: NuGet
         path: nuget
     - name: Get release
       id: get_release
