@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,7 +38,7 @@ namespace TestApplication
             NLogViewer1.TimeStampResolver = new FooTimeStampResolver();
             Stopwatch stopwatch = Stopwatch.StartNew();
             Random random = new Random();
-            Observable.Interval(TimeSpan.FromMilliseconds(200)).ObserveOnDispatcher().Subscribe(l =>
+            Observable.Interval(TimeSpan.FromMilliseconds(200)).ObserveOn(SynchronizationContext.Current).Subscribe(l =>
             {
                 //if((_CntMessage == 10 || _CntError == 20) && TabControl1.Items.Count > 0)
                 //    TabControl1.Items.RemoveAt(0);
