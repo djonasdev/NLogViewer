@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -511,7 +513,7 @@ namespace DJ
             ListView.ScrollToEnd();
             var target = CacheTarget.GetInstance(targetName: TargetName);
             
-            _Subscription = target.Cache.SubscribeOn(Scheduler.Default).Buffer(TimeSpan.FromMilliseconds(100)).Where (x => x.Any()).ObserveOnDispatcher(DispatcherPriority.Background).Subscribe(infos =>
+            _Subscription = target.Cache.SubscribeOn(Scheduler.Default).Buffer(TimeSpan.FromMilliseconds(100)).Where (x => x.Any()).ObserveOn(new DispatcherSynchronizationContext(_ParentWindow.Dispatcher)).Subscribe(infos =>
             {
                 if (Pause) return;
                 using (LogEvents.DeferRefresh())
