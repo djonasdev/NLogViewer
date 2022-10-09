@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace DJ.Helper.ListViewLayoutManager
 {
@@ -109,117 +110,120 @@ namespace DJ.Helper.ListViewLayoutManager
 
         protected virtual void ResizeColumns()
         {
-            GridView view = _ListView.View as GridView;
-            if (view == null || view.Columns.Count == 0)
+            Application.Current.Dispatcher.InvokeAsync(delegate
             {
-                return;
-            }
-
-            // listview width
-            double actualWidth = double.PositiveInfinity;
-            if (_ScrollViewer != null)
-            {
-                actualWidth = _ScrollViewer.ViewportWidth;
-            }
-
-            if (double.IsInfinity(actualWidth))
-            {
-                actualWidth = _ListView.ActualWidth;
-            }
-
-            if (double.IsInfinity(actualWidth) || actualWidth <= 0)
-            {
-                return;
-            }
-
-            double resizeableRegionCount = 0;
-            double otherColumnsWidth = 0;
-            // determine column sizes
-            foreach (GridViewColumn gridViewColumn in view.Columns)
-            {
-                if (ProportionalColumn.IsProportionalColumn(gridViewColumn))
+                GridView view = _ListView.View as GridView;
+                if (view == null || view.Columns.Count == 0)
                 {
-                    double? proportionalWidth = ProportionalColumn.GetProportionalWidth(gridViewColumn);
-                    if (proportionalWidth != null)
-                    {
-                        resizeableRegionCount += proportionalWidth.Value;
-                    }
+                    return;
                 }
-                else
-                {
-                    otherColumnsWidth += gridViewColumn.ActualWidth;
-                }
-            }
 
-            if (resizeableRegionCount <= 0)
-            {
-                // no proportional columns present: commit the regulation to the scroll viewer
+                // listview width
+                double actualWidth = double.PositiveInfinity;
                 if (_ScrollViewer != null)
                 {
-                    _ScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+                    actualWidth = _ScrollViewer.ViewportWidth;
                 }
 
-                // search the first fill column
-                GridViewColumn fillColumn = null;
-                for (int i = 0; i < view.Columns.Count; i++)
+                if (double.IsInfinity(actualWidth))
                 {
-                    GridViewColumn gridViewColumn = view.Columns[i];
-                    if (_IsFillColumn(gridViewColumn))
+                    actualWidth = _ListView.ActualWidth;
+                }
+
+                if (double.IsInfinity(actualWidth) || actualWidth <= 0)
+                {
+                    return;
+                }
+
+                double resizeableRegionCount = 0;
+                double otherColumnsWidth = 0;
+                // determine column sizes
+                foreach (GridViewColumn gridViewColumn in view.Columns)
+                {
+                    if (ProportionalColumn.IsProportionalColumn(gridViewColumn))
                     {
-                        fillColumn = gridViewColumn;
-                        break;
+                        double? proportionalWidth = ProportionalColumn.GetProportionalWidth(gridViewColumn);
+                        if (proportionalWidth != null)
+                        {
+                            resizeableRegionCount += proportionalWidth.Value;
+                        }
+                    }
+                    else
+                    {
+                        otherColumnsWidth += gridViewColumn.ActualWidth;
                     }
                 }
 
-                if (fillColumn != null)
+                if (resizeableRegionCount <= 0)
                 {
-                    double otherColumnsWithoutFillWidth = otherColumnsWidth - fillColumn.ActualWidth;
-                    double fillWidth = actualWidth - otherColumnsWithoutFillWidth;
-                    if (fillWidth > 0)
+                    // no proportional columns present: commit the regulation to the scroll viewer
+                    if (_ScrollViewer != null)
                     {
-                        double? minWidth = RangeColumn.GetRangeMinWidth(fillColumn);
-                        double? maxWidth = RangeColumn.GetRangeMaxWidth(fillColumn);
+                        _ScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+                    }
 
-                        bool setWidth = !(minWidth.HasValue && fillWidth < minWidth.Value);
-                        if (maxWidth.HasValue && fillWidth > maxWidth.Value)
+                    // search the first fill column
+                    GridViewColumn fillColumn = null;
+                    for (int i = 0; i < view.Columns.Count; i++)
+                    {
+                        GridViewColumn gridViewColumn = view.Columns[i];
+                        if (_IsFillColumn(gridViewColumn))
                         {
-                            setWidth = false;
+                            fillColumn = gridViewColumn;
+                            break;
                         }
+                    }
 
-                        if (setWidth)
+                    if (fillColumn != null)
+                    {
+                        double otherColumnsWithoutFillWidth = otherColumnsWidth - fillColumn.ActualWidth;
+                        double fillWidth = actualWidth - otherColumnsWithoutFillWidth;
+                        if (fillWidth > 0)
                         {
-                            if (_ScrollViewer != null)
+                            double? minWidth = RangeColumn.GetRangeMinWidth(fillColumn);
+                            double? maxWidth = RangeColumn.GetRangeMaxWidth(fillColumn);
+
+                            bool setWidth = !(minWidth.HasValue && fillWidth < minWidth.Value);
+                            if (maxWidth.HasValue && fillWidth > maxWidth.Value)
                             {
-                                _ScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                                setWidth = false;
                             }
 
-                            fillColumn.Width = fillWidth;
+                            if (setWidth)
+                            {
+                                if (_ScrollViewer != null)
+                                {
+                                    _ScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                                }
+
+                                fillColumn.Width = fillWidth;
+                            }
+                        }
+                    }
+
+                    return;
+                }
+
+                double resizeableColumnsWidth = actualWidth - otherColumnsWidth;
+                if (resizeableColumnsWidth <= 0)
+                {
+                    return; // missing space
+                }
+
+                // resize columns
+                double resizeableRegionWidth = resizeableColumnsWidth / resizeableRegionCount;
+                foreach (GridViewColumn gridViewColumn in view.Columns)
+                {
+                    if (ProportionalColumn.IsProportionalColumn(gridViewColumn))
+                    {
+                        double? proportionalWidth = ProportionalColumn.GetProportionalWidth(gridViewColumn);
+                        if (proportionalWidth != null)
+                        {
+                            gridViewColumn.Width = proportionalWidth.Value * resizeableRegionWidth;
                         }
                     }
                 }
-
-                return;
-            }
-
-            double resizeableColumnsWidth = actualWidth - otherColumnsWidth;
-            if (resizeableColumnsWidth <= 0)
-            {
-                return; // missing space
-            }
-
-            // resize columns
-            double resizeableRegionWidth = resizeableColumnsWidth / resizeableRegionCount;
-            foreach (GridViewColumn gridViewColumn in view.Columns)
-            {
-                if (ProportionalColumn.IsProportionalColumn(gridViewColumn))
-                {
-                    double? proportionalWidth = ProportionalColumn.GetProportionalWidth(gridViewColumn);
-                    if (proportionalWidth != null)
-                    {
-                        gridViewColumn.Width = proportionalWidth.Value * resizeableRegionWidth;
-                    }
-                }
-            }
+            }, DispatcherPriority.Loaded);
         }
 
         #endregion
