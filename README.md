@@ -22,7 +22,7 @@ NlogViewer
 
 NlogViewer is a ui control library to visualize NLog logs in your personal application. It is mainly based on [Sentinel][1] and its controls.
 
-supported Frameworks: `.NETCoreApp v3.0`, `.NETCoreApp v3.1`, `.NET Framework 4.6.1`
+supported Framework: `.NET6`
 
 ![NLogViewer][p2]
 

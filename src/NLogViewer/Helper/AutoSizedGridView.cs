@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Windows.Controls;
 using NLog;
 
@@ -20,7 +21,7 @@ namespace DJ.Helper
                 if (info.LoggerName.Length > _MaxLoggerNameLength)
                 {
                     _MaxLoggerNameLength = info.LoggerName.Length;
-                    Observable.Timer(TimeSpan.FromMilliseconds(1)).ObserveOnDispatcher().Subscribe(l =>
+                    Observable.Timer(TimeSpan.FromMilliseconds(1)).ObserveOn(SynchronizationContext.Current).Subscribe(l =>
                     {
                         foreach (GridViewColumn column in Columns)
                         {
