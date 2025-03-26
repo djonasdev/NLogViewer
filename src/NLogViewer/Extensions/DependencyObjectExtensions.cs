@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace DJ.Extensions
 {
@@ -49,24 +50,26 @@ namespace DJ.Extensions
         {
             if (parent == null) yield break;
 
-            if (parent is ContentElement || parent is FrameworkElement)
-            {
-                //use the logical tree for content / framework elements
-                foreach (object obj in LogicalTreeHelper.GetChildren(parent))
-                {
-                    var depObj = obj as DependencyObject;
-                    if (depObj != null) yield return (DependencyObject) obj;
-                }
-            }
-            else
-            {
-                //use the visual tree per default
-                int count = VisualTreeHelper.GetChildrenCount(parent);
-                for (int i = 0; i < count; i++)
-                {
-                    yield return VisualTreeHelper.GetChild(parent, i);
-                }
-            }
+			// check for type, because GetChildrenCount() is throwing exception
+			if (parent is Visual or Visual3D)
+			{
+				// Use the visual tree if the element is a Visual or Visual3D
+				int count = VisualTreeHelper.GetChildrenCount(parent);
+				for (int i = 0; i < count; i++)
+				{
+					yield return VisualTreeHelper.GetChild(parent, i);
+				}
+			}
+			// no more type checks required as GetChildren() is returns EnumeratorWrapper.Empty
+			else
+			{
+				//use the logical tree for content / framework elements
+				foreach (object obj in LogicalTreeHelper.GetChildren(parent))
+				{
+					var depObj = obj as DependencyObject;
+					if (depObj != null) yield return (DependencyObject)obj;
+				}
+			}
         }
     }
 }
